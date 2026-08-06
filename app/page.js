@@ -113,19 +113,36 @@ function saveTrips(trips) {
 
 export default function Home() {
   const [authed, setAuthed] = useState(false);
+  const [darkMode, setDarkMode] = useState(false);
 
   useEffect(() => {
-    if (typeof window !== "undefined" && localStorage.getItem("andrea-auth") === "true") {
-      setAuthed(true);
+    if (typeof window !== "undefined") {
+      if (localStorage.getItem("andrea-auth") === "true") setAuthed(true);
+      if (localStorage.getItem("andrea-dark") === "true") {
+        setDarkMode(true);
+        document.documentElement.setAttribute("data-theme", "dark");
+      }
     }
   }, []);
 
+  function toggleDark() {
+    const next = !darkMode;
+    setDarkMode(next);
+    document.documentElement.setAttribute("data-theme", next ? "dark" : "");
+    localStorage.setItem("andrea-dark", next ? "true" : "false");
+  }
+
+  function logout() {
+    localStorage.removeItem("andrea-auth");
+    setAuthed(false);
+  }
+
   if (!authed) return <LoginScreen onLogin={() => setAuthed(true)} />;
 
-  return <Dashboard />;
+  return <Dashboard onLogout={logout} darkMode={darkMode} onToggleDark={toggleDark} />;
 }
 
-function Dashboard() {
+function Dashboard({ onLogout, darkMode, onToggleDark }) {
   const [trips, setTrips] = useState([]);
   const [currentTrip, setCurrentTrip] = useState(null); // trip index or null (home)
   const [currentView, setCurrentView] = useState("summary");
@@ -280,11 +297,24 @@ function Dashboard() {
               <h1>Andrea Aan De Top</h1>
               <p className="sub">Fietsen, hardlopen & bergbeklimmen</p>
             </div>
+            <div style={{ display: "flex", gap: 6 }}>
+              <button onClick={onToggleDark} style={{ background: "rgba(255,255,255,0.2)", border: "none", color: "white", borderRadius: 8, padding: "6px 10px", cursor: "pointer", fontSize: 16 }}>
+                {darkMode ? "\u2600\uFE0F" : "\u{1F319}"}
+              </button>
+              <button onClick={onLogout} style={{ background: "rgba(255,255,255,0.2)", border: "none", color: "white", borderRadius: 8, padding: "6px 10px", cursor: "pointer", fontSize: 12, fontFamily: "inherit" }}>
+                Uitloggen
+              </button>
+            </div>
           </div>
         </header>
 
-        {/* Quote */}
-        <div className="motivation" style={{ margin: "20px 20px 16px" }}>
+        {/* Geitje mascotte */}
+        <div style={{ textAlign: "center", padding: "20px 20px 0" }}>
+          <img src="/goat.png" alt="Berggeitje mascotte" style={{ width: 180, height: 180, borderRadius: 20, objectFit: "cover", boxShadow: "0 4px 20px rgba(0,0,0,0.1)" }} />
+          <p style={{ fontSize: 12, color: "var(--text-dim)", marginTop: 8, fontStyle: "italic" }}>Je persoonlijke berggids</p>
+        </div>
+
+        <div className="motivation" style={{ margin: "12px 20px 16px" }}>
           <p style={{ fontStyle: "italic" }}>{quote}</p>
         </div>
 
@@ -293,7 +323,7 @@ function Dashboard() {
 
           {trips.length === 0 && !showNewTrip && (
             <div style={{ textAlign: "center", padding: "30px 20px", color: "var(--text-dim)" }}>
-              <div style={{ fontSize: 48, marginBottom: 12 }}>&#x1F3D4;&#xFE0F;</div>
+              <div style={{ fontSize: 48, marginBottom: 12 }}>{"\u{1F410}"}</div>
               <p style={{ fontSize: 15, marginBottom: 4 }}>Nog geen avonturen</p>
               <p style={{ fontSize: 13 }}>Maak je eerste avontuur aan en upload je Garmin bestanden!</p>
             </div>
@@ -438,6 +468,9 @@ function Dashboard() {
               )}
             </div>
           </div>
+          <button onClick={onToggleDark} style={{ background: "rgba(255,255,255,0.2)", border: "none", color: "white", borderRadius: 8, padding: "6px 10px", cursor: "pointer", fontSize: 16 }}>
+            {darkMode ? "\u2600\uFE0F" : "\u{1F319}"}
+          </button>
         </div>
       </header>
 

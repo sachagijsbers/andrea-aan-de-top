@@ -17,6 +17,16 @@
   --radius: 16px;
 }
 
+/* DARK MODE */
+[data-theme="dark"] {
+  --bg: #0f1410;
+  --card: #1a2418;
+  --text: #e8f5e9;
+  --text-dim: #7fa888;
+  --shadow: 0 2px 12px rgba(0,0,0,0.3);
+  --shadow-lg: 0 4px 20px rgba(0,0,0,0.4);
+}
+
 * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
 body {
