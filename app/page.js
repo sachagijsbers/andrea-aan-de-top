@@ -65,6 +65,23 @@ function LoginScreen({ onLogin }) {
   );
 }
 
+// ==================== BEHRTJE ====================
+const behrtjeImages = [
+  { src: "/goat.png", caption: "Behrtje de bergbeklimmer" },
+  { src: "/goat2.png", caption: "Behrtje — snel, stout en supergoat!" },
+];
+
+function BehrtjeImage() {
+  const [idx] = useState(() => Math.floor(Math.random() * behrtjeImages.length));
+  const b = behrtjeImages[idx];
+  return (
+    <div style={{ textAlign: "center", padding: "20px 20px 0" }}>
+      <img src={b.src} alt="Behrtje" style={{ width: 200, height: 200, borderRadius: 20, objectFit: "cover", boxShadow: "0 4px 20px rgba(0,0,0,0.1)" }} />
+      <p style={{ fontSize: 13, color: "var(--text-dim)", marginTop: 8 }}><strong>{b.caption}</strong></p>
+    </div>
+  );
+}
+
 // ==================== QUOTES & MOPPEN ====================
 const homeQuotes = [
   "De berg roept. En Andrea luistert.",
@@ -308,11 +325,8 @@ function Dashboard({ onLogout, darkMode, onToggleDark }) {
           </div>
         </header>
 
-        {/* Geitje mascotte */}
-        <div style={{ textAlign: "center", padding: "20px 20px 0" }}>
-          <img src="/goat.png" alt="Berggeitje mascotte" style={{ width: 180, height: 180, borderRadius: 20, objectFit: "cover", boxShadow: "0 4px 20px rgba(0,0,0,0.1)" }} />
-          <p style={{ fontSize: 13, color: "var(--text-dim)", marginTop: 8 }}><strong>Behrtje</strong> — je persoonlijke berggids</p>
-        </div>
+        {/* Behrtje mascotte (roterend) */}
+        <BehrtjeImage />
 
         <div className="motivation" style={{ margin: "12px 20px 16px" }}>
           <p style={{ fontStyle: "italic" }}>{quote}</p>
