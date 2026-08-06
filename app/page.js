@@ -7,6 +7,64 @@ import { getMotivation } from "@/lib/motivation";
 import { compareWithFamousClimbs, matchClimbProfile } from "@/lib/famous-climbs";
 import { calculateVAM, estimatePowerPerKg, analyzePacing, analyzeFatigue, analyzeRecovery, getHRZones, calculateEffortScore, getHRZoneColor } from "@/lib/insights";
 
+// ==================== LOGIN ====================
+function LoginScreen({ onLogin }) {
+  const [pw, setPw] = useState("");
+  const [error, setError] = useState(false);
+  const appPassword = process.env.NEXT_PUBLIC_APP_PASSWORD || "andrea2026";
+
+  function handleLogin(e) {
+    e.preventDefault();
+    if (pw === appPassword) {
+      if (typeof window !== "undefined") localStorage.setItem("andrea-auth", "true");
+      onLogin();
+    } else {
+      setError(true);
+      setTimeout(() => setError(false), 2000);
+    }
+  }
+
+  return (
+    <div style={{ minHeight: "100dvh", background: "var(--bg)", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: 20 }}>
+      <div style={{ textAlign: "center", marginBottom: 32 }}>
+        <div style={{ fontSize: 64, marginBottom: 12 }}>{"\u{1F3D4}\uFE0F"}</div>
+        <h1 style={{ fontSize: 28, fontWeight: 800, background: "linear-gradient(135deg, #2ecc71, #1abc9c)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>
+          Andrea Aan De Top
+        </h1>
+        <p style={{ color: "var(--text-dim)", fontSize: 14, marginTop: 6 }}>Fietsen, hardlopen & bergbeklimmen</p>
+      </div>
+      <form onSubmit={handleLogin} style={{ width: "100%", maxWidth: 320 }}>
+        <input
+          type="password"
+          value={pw}
+          onChange={e => setPw(e.target.value)}
+          placeholder="Wachtwoord"
+          autoFocus
+          style={{
+            width: "100%", padding: "14px 18px", borderRadius: 12,
+            border: error ? "2px solid #e74c3c" : "2px solid #e0e0e0",
+            fontSize: 16, fontFamily: "inherit", outline: "none",
+            background: "white", color: "var(--text)", textAlign: "center",
+            transition: "border 0.3s"
+          }}
+        />
+        {error && <p style={{ color: "#e74c3c", fontSize: 13, textAlign: "center", marginTop: 8 }}>Verkeerd wachtwoord</p>}
+        <button
+          type="submit"
+          style={{
+            width: "100%", marginTop: 12, padding: "14px",
+            background: "linear-gradient(135deg, #2ecc71, #1abc9c)",
+            color: "white", border: "none", borderRadius: 12,
+            fontSize: 16, fontWeight: 600, cursor: "pointer", fontFamily: "inherit"
+          }}
+        >
+          Inloggen
+        </button>
+      </form>
+    </div>
+  );
+}
+
 // ==================== QUOTES & MOPPEN ====================
 const homeQuotes = [
   "De berg roept. En Andrea luistert.",
@@ -54,6 +112,20 @@ function saveTrips(trips) {
 }
 
 export default function Home() {
+  const [authed, setAuthed] = useState(false);
+
+  useEffect(() => {
+    if (typeof window !== "undefined" && localStorage.getItem("andrea-auth") === "true") {
+      setAuthed(true);
+    }
+  }, []);
+
+  if (!authed) return <LoginScreen onLogin={() => setAuthed(true)} />;
+
+  return <Dashboard />;
+}
+
+function Dashboard() {
   const [trips, setTrips] = useState([]);
   const [currentTrip, setCurrentTrip] = useState(null); // trip index or null (home)
   const [currentView, setCurrentView] = useState("summary");
