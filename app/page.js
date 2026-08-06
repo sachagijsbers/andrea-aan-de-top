@@ -311,7 +311,7 @@ function Dashboard({ onLogout, darkMode, onToggleDark }) {
         {/* Geitje mascotte */}
         <div style={{ textAlign: "center", padding: "20px 20px 0" }}>
           <img src="/goat.png" alt="Berggeitje mascotte" style={{ width: 180, height: 180, borderRadius: 20, objectFit: "cover", boxShadow: "0 4px 20px rgba(0,0,0,0.1)" }} />
-          <p style={{ fontSize: 12, color: "var(--text-dim)", marginTop: 8, fontStyle: "italic" }}>Je persoonlijke berggids</p>
+          <p style={{ fontSize: 13, color: "var(--text-dim)", marginTop: 8 }}><strong>Behrtje</strong> — je persoonlijke berggids</p>
         </div>
 
         <div className="motivation" style={{ margin: "12px 20px 16px" }}>
