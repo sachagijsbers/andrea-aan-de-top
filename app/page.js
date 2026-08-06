@@ -69,6 +69,7 @@ function LoginScreen({ onLogin }) {
 const behrtjeImages = [
   { src: "/goat.png", caption: "Behrtje de bergbeklimmer" },
   { src: "/goat2.png", caption: "Behrtje — snel, stout en supergoat!" },
+  { src: "/goat3.png", caption: "Behrtje op weg naar avontuur!" },
 ];
 
 function BehrtjeImage() {
